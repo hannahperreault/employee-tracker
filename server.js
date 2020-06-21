@@ -32,7 +32,7 @@ const start = () => {
       if (answer.chooseAction === "VIEW") {
         //function to view records
         //   viewRecords();
-        console.log("viewing record");
+        viewRecords();
       } else if (answer.chooseAction === "ADD") {
         //function to add record
         addRecord();
@@ -47,7 +47,23 @@ const start = () => {
     });
 };
 
-const viewRecords = () => {};
+const viewRecords = () => {
+  inquirer
+    .prompt({
+      name: "chooseAction",
+      type: "list",
+      message: "Which date do you want to view?",
+      choices: ["ROLES", "DEPARTMENT", "EMPLOYEE"],
+    })
+    .then(function (answer) {
+      connection.query(`SELECT * FROM ${answer.chooseAction}`, (err, res) => {
+        if (err) {
+          throw err;
+        }
+        console.table(res);
+      });
+    });
+};
 
 const addRecord = () => {
   inquirer
