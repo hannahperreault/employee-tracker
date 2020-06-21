@@ -35,7 +35,7 @@ const start = () => {
         console.log("viewing record");
       } else if (answer.chooseAction === "ADD") {
         //function to add record
-        //   addRecord();
+        addRecord();
         console.log("adding record");
       } else if (answer.chooseAction === "UPDATE") {
         //function to update record
@@ -47,3 +47,69 @@ const start = () => {
       }
     });
 };
+
+const viewRecords = () => {};
+
+const addRecord = () => {
+  inquirer
+    .prompt([
+      {
+        name: "table_type",
+        type: "list",
+        message: "What kind of record do you want to add?",
+        choices: ["DEPARTMENT", "EMPLOYEE", "ROLE"],
+      },
+    ])
+    .then(function (answer) {
+      // when finished prompting, insert a new item into the db with that info
+
+      //add a new DEPARTMENT:
+      if (answer.table_type === "DEPARTMENT") {
+        console.log("yes, department");
+        inquirer
+          .prompt([
+            {
+              name: "dept_name_insert",
+              type: "input",
+              message: "What is the department name you want to add?",
+            },
+          ])
+          .then(function (answer) {
+            console.log(answer.dept_name_insert);
+            connection.query(
+              "INSERT INTO department SET ?",
+              {
+                dept_name: answer.dept_name_insert,
+              },
+              (err) => {
+                if (err) {
+                  throw err;
+                }
+              }
+            );
+          });
+      }
+
+      //   connection.query("SELECT * FROM department", (err, res) => {
+      //     if (err) throw err;
+      //     console.log(res);
+      //     //   connection.query(
+      //     //     "INSERT INTO auctions SET ?",
+      //     //     {
+      //     //       item_name: answer.item,
+      //     //       category: answer.category,
+      //     //       starting_bid: answer.startingBid || 0,
+      //     //       highest_bid: answer.startingBid || 0,
+      //     //     },
+      //     //     function (err) {
+      //     //       if (err) throw err;
+      //     //       console.log("Your auction was created successfully!");
+      //     //       // re-prompt the user for if they want to bid or post
+      //     //       start();
+      //     //     }
+      //     //   );
+      //   });
+    });
+};
+
+// const updateRecord = () => {};
