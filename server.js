@@ -36,7 +36,6 @@ const start = () => {
       } else if (answer.chooseAction === "ADD") {
         //function to add record
         addRecord();
-        console.log("adding record");
       } else if (answer.chooseAction === "UPDATE") {
         //function to update record
         //updateRecord();
@@ -89,7 +88,86 @@ const addRecord = () => {
             );
           });
       }
-
+      //add a new ROLE:
+      else if (answer.table_type === "ROLE") {
+        console.log("yes, role");
+        inquirer
+          .prompt([
+            {
+              name: "role_title",
+              type: "input",
+              message: "What is the role title you want to add?",
+            },
+            {
+              name: "role_salary",
+              type: "input",
+              message: "What is the salary for this role?",
+            },
+            {
+              name: "role_dept_id",
+              type: "input",
+              message: "What is the associated department ID?",
+            },
+          ])
+          .then(function (answer) {
+            console.log(answer);
+            connection.query(
+              "INSERT INTO roles SET ?",
+              {
+                title: answer.role_title,
+                salary: answer.role_salary,
+                dept_id: answer.role_dept_id,
+              },
+              (err) => {
+                if (err) {
+                  throw err;
+                }
+              }
+            );
+          });
+      }
+      //add a new EMPLOYEE
+      else if (answer.table_type === "EMPLOYEE") {
+        inquirer
+          .prompt([
+            {
+              name: "employee_first_name",
+              type: "input",
+              message: "What is the employee's first name?",
+            },
+            {
+              name: "employee_last_name",
+              type: "input",
+              message: "What is their last name?",
+            },
+            {
+              name: "employee_role_id",
+              type: "input",
+              message: "What is the associated role ID?",
+            },
+            {
+              name: "employee_manager_id",
+              type: "input",
+              message: "What is the associated manager ID?",
+            },
+          ])
+          .then(function (answer) {
+            connection.query(
+              "INSERT INTO employee SET ?",
+              {
+                first_name: answer.employee_first_name,
+                last_name: answer.employee_last_name,
+                role_id: answer.employee_role_id,
+                manager_id: answer.employee_manager_id,
+              },
+              (err) => {
+                if (err) {
+                  throw err;
+                }
+              }
+            );
+          });
+      }
       //   connection.query("SELECT * FROM department", (err, res) => {
       //     if (err) throw err;
       //     console.log(res);
