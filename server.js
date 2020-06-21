@@ -50,7 +50,7 @@ const viewRecords = () => {
     .prompt({
       name: "chooseAction",
       type: "list",
-      message: "Which date do you want to view?",
+      message: "What do you want to view?",
       choices: ["ROLES", "DEPARTMENT", "EMPLOYEE"],
     })
     .then(function (answer) {

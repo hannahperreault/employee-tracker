@@ -48,7 +48,22 @@ CREATE TABLE roles (
     manager_id INT
 );
 
+
+
+-- * starter data for each database
 INSERT INTO employee (
-    first_name, last_name
+    first_name, last_name, role_id, manager_id
 )
-VALUES ("Hannah", "Perreault");
+VALUES ("Hannah", "Perreault", 3, 5), ("Coco", "Bananas", 8, 9);
+
+
+INSERT INTO roles (
+    title, salary, dept_id
+)
+VALUES ("Astronaut", 7000, 5), ("Space Monkey", 1000000, 2);
+
+
+INSERT INTO department (
+    dept_name
+)
+VALUES ("Space Food"), ("Science");
