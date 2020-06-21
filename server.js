@@ -38,9 +38,7 @@ const start = () => {
         addRecord();
       } else if (answer.chooseAction === "UPDATE") {
         //function to update record
-        //updateRecord();
-
-        console.log("updating record");
+        updateRecord();
       } else {
         connection.end();
       }
@@ -61,6 +59,7 @@ const viewRecords = () => {
           throw err;
         }
         console.table(res);
+        start();
       });
     });
 };
@@ -90,7 +89,6 @@ const addRecord = () => {
             },
           ])
           .then(function (answer) {
-            console.log(answer.dept_name_insert);
             connection.query(
               "INSERT INTO department SET ?",
               {
@@ -126,7 +124,6 @@ const addRecord = () => {
             },
           ])
           .then(function (answer) {
-            console.log(answer);
             connection.query(
               "INSERT INTO roles SET ?",
               {
@@ -184,26 +181,162 @@ const addRecord = () => {
             );
           });
       }
-      //   connection.query("SELECT * FROM department", (err, res) => {
-      //     if (err) throw err;
-      //     console.log(res);
-      //     //   connection.query(
-      //     //     "INSERT INTO auctions SET ?",
-      //     //     {
-      //     //       item_name: answer.item,
-      //     //       category: answer.category,
-      //     //       starting_bid: answer.startingBid || 0,
-      //     //       highest_bid: answer.startingBid || 0,
-      //     //     },
-      //     //     function (err) {
-      //     //       if (err) throw err;
-      //     //       console.log("Your auction was created successfully!");
-      //     //       // re-prompt the user for if they want to bid or post
-      //     //       start();
-      //     //     }
-      //     //   );
-      //   });
     });
 };
 
-// const updateRecord = () => {};
+// updateRecord is selected:
+const updateRecord = () => {
+  inquirer
+    .prompt([
+      {
+        name: "table_type",
+        type: "list",
+        message: "Which kind of record do you want to update?",
+        choices: ["DEPARTMENT", "EMPLOYEE", "ROLE"],
+      },
+    ])
+    .then(function (answer) {
+      // when finished prompting, update an existing record in the selected table
+
+      //update a DEPARTMENT:
+      if (answer.table_type === "DEPARTMENT") {
+        inquirer
+          .prompt([
+            {
+              name: "update_choice",
+              type: "input",
+              message:
+                "What is the ID number of the [DEPARTMENT] record you want to change?",
+            },
+            {
+              name: "update_name",
+              type: "input",
+              message: "What is the new name for this department?",
+            },
+          ])
+          .then(function (answer) {
+            connection.query(
+              "UPDATE department SET ? WHERE ?",
+              [
+                {
+                  dept_name: answer.update_name,
+                },
+                {
+                  id: answer.update_choice,
+                },
+              ],
+              (err, res) => {
+                if (err) {
+                  throw err;
+                }
+                console.log("The record has been updated!");
+              }
+            );
+          });
+
+        //update a role record
+      } else if (answer.table_type === "ROLE") {
+        inquirer
+          .prompt([
+            {
+              name: "update_choice",
+              type: "input",
+              message:
+                "What is the ID number of the [ROLES] record you want to change?",
+            },
+            {
+              name: "update_title",
+              type: "input",
+              message: "What is the new tile for this role?",
+            },
+            {
+              name: "update_salary",
+              type: "input",
+              message: "What is the new salary for this role?",
+            },
+            {
+              name: "update_dept_id",
+              type: "input",
+              message:
+                "What is the new associated department id for this role?",
+            },
+          ])
+          .then(function (answer) {
+            connection.query(
+              "UPDATE roles SET ? WHERE ?",
+              [
+                {
+                  title: answer.update_title,
+                  salary: answer.update_salary,
+                  dept_id: answer.update_dept_id,
+                },
+                {
+                  id: answer.update_choice,
+                },
+              ],
+              (err, res) => {
+                if (err) {
+                  throw err;
+                }
+                console.log("The record has been updated!");
+              }
+            );
+          });
+        //update employee record
+      }
+      //update an employee record
+      else if (answer.table_type === "EMPLOYEE") {
+        inquirer
+          .prompt([
+            {
+              name: "update_choice",
+              type: "input",
+              message:
+                "What is the ID number of the [EMPLOYEE] record you want to change?",
+            },
+            {
+              name: "update_first_name",
+              type: "input",
+              message: "What is the new first name for this employee?",
+            },
+            {
+              name: "update_last_name",
+              type: "input",
+              message: "What is the new last name for this employee?",
+            },
+            {
+              name: "update_role_id",
+              type: "input",
+              message: "What is the new role id for this employee?",
+            },
+            {
+              name: "update_manager_id",
+              type: "input",
+              message: "What is the new manager id for this employee?",
+            },
+          ])
+          .then(function (answer) {
+            connection.query(
+              "UPDATE employee SET ? WHERE ?",
+              [
+                {
+                  first_name: answer.update_first_name,
+                  last_name: answer.update_last_name,
+                  role_id: answer.update_role_id,
+                  manager_id: answer.update_manager_id,
+                },
+                {
+                  id: answer.update_choice,
+                },
+              ],
+              (err, res) => {
+                if (err) {
+                  throw err;
+                }
+                console.log("The record has been updated!");
+              }
+            );
+          });
+      }
+    });
+};
