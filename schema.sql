@@ -1,3 +1,6 @@
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'oupidenf87';
+FLUSH PRIVILEGES;
+
 DROP DATABASE IF EXISTS employee_tracker;
 
 CREATE DATABASE employee_tracker;
@@ -12,7 +15,7 @@ CREATE TABLE department (
     id INT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (id),
     dept_name VARCHAR(30)
-)
+);
 
 
 -- * **role**:
@@ -27,7 +30,7 @@ CREATE TABLE roles (
     title VARCHAR(30),
     salary DECIMAL,
     dept_id INT
-)
+);
 
 -- * **employee**:
 
@@ -43,4 +46,9 @@ CREATE TABLE roles (
     last_name VARCHAR(30),
     role_id INT,
     manager_id INT
+);
+
+INSERT INTO employee (
+    first_name, last_name
 )
+VALUES ("Hannah", "Perreault");
